@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Appointments Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+    <div class="w3-bar w3-black w3-padding-16"><a href="{% url 'welcome' %}">Welcome Dr {{ doctor.first_name }} {{ doctor.last_name }}</a></div>
+     
+    {% if appointment %}
+    
+    <div><h2>Appointments today</h2></div>
+    <div style="height: 100%; display: flex; justify-content: center; align-items: center;">
+            {% if patient_queue == 1 %}
+            <h3>There is {{ patient_queue }} patient queued ahead of you.</h3>
+            {% else %}
+            <h3>There are {{ patient_queue }} patients queued ahead of you.</h3>
+            {% endif %}
+    </div>
+		
+    <br>
+    
+    <div class="w3-container">
+        {% for p in appointment %}
+        <p>Please Click on Arrived to confirm!</p>
+        <div class="w3-panel w3-card">
+            <tr>
+                <p>Appointment ID : {{ p.id }} </p>
+                <p> Scheduled Time: {{p.scheduled_time}} </p> 
+                <p>Appointment Status : {% if p.status %}{{p.status}}{% else %}Not Available{% endif %}</p>
+                {% if p.status != 'Complete' %}
+                  <form action="{% url 'arrived' p.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="appid" value="{{ p.id }}">
+                    <input type="submit" value="Arrived" class="btn btn-primary">
+                  </form>
+                {% endif %}
+                
+                </br>            
+            </tr>
+
+        </div>
+        
+    {% endfor %}
+
+    </div>
+    {% else %}
+    <div><h2>You have no Appointments Today!</h2></div>
+    {% endif %}
+
+    
+    <br>
+   <div class="w3-container">
+    <button><a href="{% url 'checkin' %}">Done</a></button>
+   </div>
+</body>
+</html>

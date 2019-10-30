@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Schedule Page</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+    <div class="w3-bar w3-black w3-padding-16"><a href="{% url 'welcome' %}">Welcome Dr {{ doctor.first_name }} {{ doctor.last_name }}</a></div>
+    <h2>Today's Schedule </h2> <div style="float:right">Average Time: {{average_wait_time}}</div>
+    {% if schedule %}
+    
+        
+    <b>Scheduled Appointments:</b> 
+    
+    
+    <div class="w3-container">
+        {% for p in schedule %}
+        <div class="w3-panel w3-card w3-green">
+                <p> Appointment ID: {{p.id}}</p> 
+                  <p> Patient Name: {{p.name}} {{p.surname}}  </p> 
+                   <p> Scheduled Time: {{p.appointment_time }}  </p>
+                {% if p.status == "Arrived" %}
+                    <p>Patient Arrived</p>
+                    <!-- <button>See Patient</button> -->
+                    <form action="{% url 'see_patient' p.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="appid" value="{{ p.id }}">
+                        <input type="submit" value="See Patient" class="btn btn-primary">
+                    </form>
+                </br>
+        </div>
+        
+        
+        <div class="w3-panel w3-card">
+            {% elif p.status == 'In Session' %}
+            <p>In Progress</p>
+                <form action="{% url 'complete' p.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="app_id" value="{{ p.id }}">
+                    <input type="submit" value="Complete" class="btn btn-primary">
+                </form>
+            </br>
+        </div>
+                {% elif p.status == 'Complete' %} 
+                <p>Completed</p>
+        </div>
+        <div class="w3-panel w3-card">
+                {% else %}
+                <p>{{p.status}}</p>
+            {% endif %}
+        </div>
+            
+        {% endfor %}
+    </div>
+</br>
+    {% else %}
+        <h2>You have no appointments today</h2>
+    {% endif %}
+
+    
+
+    
+</body>
+</html>

@@ -1,0 +1,32 @@
+{%extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Patient Checkin</title>
+</head>
+{%  block body %}
+<div class="w3-bar w3-black w3-padding-16"><a href="{% url 'welcome' %}">Welcome Dr Mihir Ranade</a></div>
+    <div class="container">
+            <h1>Your details</h1>
+            <div class="w3-panel w3-card ">
+                    <p>Address : {{data.address}} </p></br>
+                    <p>Email : {{data.email}} </p></br>
+                    <p>Phone Number : {{data.phone}} </p></br>
+                
+                    <p>Do you want to update details?</p></br>
+
+                    <button ><a href="{% url 'update' %}">Yes</a></button>
+                    <button><a href="{% url 'appointment' %}">No</a></button>
+            
+            </div>
+            
+        </br>
+    </div>
+    
+    
+    
+{% endblock %}
+</html>
